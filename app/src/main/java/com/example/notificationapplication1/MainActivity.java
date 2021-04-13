@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
     //For notification channel
         //We need channel Id, Name, Desc
 
-    private static final String CHANNEL_ID = "sampa";
+    public static final String CHANNEL_ID = "sampa";
     private static final String CHANNEL_NAME = "sam pa";
     private static final String CHANNEL_DESC = "sam pa notification";
 
@@ -138,19 +138,6 @@ public class MainActivity extends AppCompatActivity {
         //So that someone does not use back button to go back to main activity using back button
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
-    }
-
-    //Function that will display the notification
-    public void displayNotification(View view){
-        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this, CHANNEL_ID)
-                    .setSmallIcon(R.drawable.notifications_none_24)
-                    .setContentTitle("New notication sent")
-                    .setContentText("New marks updated")
-                    .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                ;
-
-        NotificationManagerCompat mNotificationMgr = NotificationManagerCompat.from(this);
-        mNotificationMgr.notify(1, mBuilder.build());
     }
 
 }
