@@ -64,21 +64,6 @@ public class MainActivity extends AppCompatActivity {
             manager.createNotificationChannel(channel);
         }
 
-        //getting the registration token
-
-        FirebaseInstallations.getInstance().getToken(true)
-                .addOnCompleteListener(new OnCompleteListener<InstallationTokenResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<InstallationTokenResult> task) {
-                        if (task.isSuccessful()){
-                            String token = task.getResult().getToken();
-
-                        }else{
-
-                        }
-                    }
-                });
-
         findViewById(R.id.buttonSignUp).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -138,6 +123,14 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
                 });
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if(mAuth.getCurrentUser() != null) {
+            startProfileActivity();
+        }
     }
 
     private void startProfileActivity(){
