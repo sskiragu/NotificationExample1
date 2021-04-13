@@ -1,5 +1,6 @@
 package com.example.notificationapplication1;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
@@ -9,6 +10,13 @@ import android.app.NotificationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.TextView;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.installations.FirebaseInstallations;
+import com.google.firebase.installations.InstallationTokenResult;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -23,10 +31,14 @@ public class MainActivity extends AppCompatActivity {
     private static final String CHANNEL_NAME = "sam pa";
     private static final String CHANNEL_DESC = "sam pa notification";
 
+    private TextView textViewToken;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        textViewToken = findViewById(R.id.textViewToken);
 
         // android > 8
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
@@ -36,6 +48,21 @@ public class MainActivity extends AppCompatActivity {
             NotificationManager manager = getSystemService(NotificationManager.class);
             manager.createNotificationChannel(channel);
         }
+
+        //getting the registration token
+
+        FirebaseInstallations.getInstance().getToken(true)
+                .addOnCompleteListener(new OnCompleteListener<InstallationTokenResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<InstallationTokenResult> task) {
+                        if (task.isSuccessful()){
+                            String token = task.getResult().getToken();
+                            textViewToken.setText("Token" + token);
+                        }else{
+                            textViewToken.setText(task.getException().getMessage());
+                        }
+                    }
+                });
     }
 
     //Function that will display the notification
